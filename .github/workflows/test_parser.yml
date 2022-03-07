@@ -51,7 +51,6 @@ jobs:
         run: |
           coverage run -m unittest tests.test_parser
           coverage run -m unittest tests.test_tree
-          coverage combine
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
