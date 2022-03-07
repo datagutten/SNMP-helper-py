@@ -10,7 +10,7 @@ class ParserTestCase(unittest.TestCase):
 
     def test_imports(self):
         mib = MibParser.parse_file(mib_path + '/SNMPv2-TC.mib')
-        self.assertEqual({'SNMPv2-SMI': ['TimeTicks']}, mib.imports)
+        self.assertEqual({'SNMPv2-SMI': ['ObjectSyntax', 'TimeTicks']}, mib.imports)
 
     def test_syntax(self):
         mib = MibParser.parse_file(mib_path + '/MG-MIB.mib')
