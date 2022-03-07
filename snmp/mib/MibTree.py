@@ -85,7 +85,7 @@ class MibTree:
             if imported:  # Is the parent imported?
                 mib_obj_import = self.get_mib(imported)
                 raw_parent = mib_obj_import.find_node(item.parent)
-                print('%s is imported to %s from %s' % (item.parent, mib.name, imported))
+                # print('%s is imported to %s from %s' % (item.parent, mib.name, imported))
             else:
                 raw_parent = mib_obj.find_node(item.parent)
 
@@ -136,7 +136,7 @@ class MibTree:
 
             root_node = parent_node.add_child(root_node_raw)
             mib.identity.root = root_node
-            print('Root node %s' % root_node)
+            # print('Root node %s' % root_node)
         # depth = self.mib_depth(mib)
 
         for item in mib.nodes:
