@@ -6,8 +6,6 @@ authors = ["Anders Birkenes <datagutten@datagutten.net>"]
 readme = "README.md"
 packages = [{ include = "snmp_compat" }, { include = "mib_parser" }]
 
-[tool.poetry.dependencies]
-python = "^3.11"
 [tool.poetry.group.easysnmp.dependencies]
 easysnmp = "^0.2.6"
 [tool.poetry.group.ezsnmp.dependencies]
