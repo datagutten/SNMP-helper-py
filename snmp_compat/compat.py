@@ -2,7 +2,7 @@ import os
 from abc import ABC
 from typing import Type, List
 
-from snmp_compat import SNMPResponse
+from .response import SNMPResponse
 
 
 class SNMPCompat(ABC):
