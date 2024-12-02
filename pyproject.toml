@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "SNMP-helper"
+version = "0.1.0"
+description = "SNMP library compatibility module"
+authors = ["Anders Birkenes <datagutten@datagutten.net>"]
+readme = "README.md"
+packages = [{ include = "snmp_compat" }, { include = "mib_parser" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+[tool.poetry.group.easysnmp.dependencies]
+easysnmp = "^0.2.6"
+[tool.poetry.group.ezsnmp.dependencies]
+ezsnmp = "^1.0.0"
+[tool.poetry.group.netsnmp.dependencies]
+netsnmp-py = { git = "https://github.com/datagutten/netsnmp-py3.git", branch = "exception_fix" }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
