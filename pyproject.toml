@@ -6,6 +6,9 @@ authors = ["Anders Birkenes <datagutten@datagutten.net>"]
 readme = "README.md"
 packages = [{ include = "snmp_compat" }, { include = "mib_parser" }]
 
+[tool.poetry.dependencies]
+python = ">=3.9"
+
 [tool.poetry.group.easysnmp.dependencies]
 easysnmp = "^0.2.6"
 [tool.poetry.group.ezsnmp.dependencies]
@@ -13,7 +16,10 @@ ezsnmp = "^1.0.0"
 [tool.poetry.group.netsnmp.dependencies]
 netsnmp-py = { git = "https://github.com/datagutten/netsnmp-py3.git", branch = "exception_fix" }
 [tool.poetry.group.pysnmp.dependencies]
-pysnmp = { version = "^7", python = ">=3.9" }
+pysnmp = "^7"
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.10.0"
 
 [build-system]
 requires = ["poetry-core"]
