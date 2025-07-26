@@ -27,3 +27,14 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.run]
 branch = true
+
+[tool.coverage.paths]
+source = ["snmp_compat", "mib_parser"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if self.debug:",
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:"
+]
