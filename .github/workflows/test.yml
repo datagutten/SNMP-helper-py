@@ -41,7 +41,7 @@ jobs:
     - name: Run tests with unittest
       run: coverage run -m unittest tests.compat.test_compat
       env:
-        SNMP_LIBRARY: ${{ matrix.snmp_library }}
+        SNMP_LIBRARY: ${{ matrix.snmp-library }}
         SNMPSIM_HOST: 127.0.0.1
 
     - uses: codecov/codecov-action@v4
