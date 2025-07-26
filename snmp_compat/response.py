@@ -84,9 +84,6 @@ class SNMPResponse(object):
             )
         )
 
-    def __setattr__(self, name, value):
-        self.__dict__[name] = str(value)
-
     def hex_string(self):
         string = ''
         for octet in self.value:
