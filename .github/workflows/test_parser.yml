@@ -18,39 +18,39 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Cache MIBs
-        uses: actions/cache@v4
-        with:
-          path: tests/mibs
-          key: mibs-${{ hashFiles('tests/mibs/*.mib') }}
-          restore-keys: mibs-
+    - name: Cache MIBs
+      uses: actions/cache@v4
+      with:
+        path: tests/mibs
+        key: mibs-${{ hashFiles('tests/mibs/*.mib') }}
+        restore-keys: mibs-
 
-      - name: Download MIBs
-        working-directory: tests
-        run: |
-          mkdir -p mibs
-          cd mibs
-          wget -nc --no-check-certificate -O MG-MIB.mib https://www.racom.eu/download/hw/midge/free/eng/3_fw/midge2-mib.mib
-          wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-SMI.mib
-          wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-TC.mib
-          wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-TM.mib
-          wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-MIB.mib
+    - name: Download MIBs
+      working-directory: tests
+      run: |
+        mkdir -p mibs
+        cd mibs
+        wget -nc --no-check-certificate -O MG-MIB.mib https://www.racom.eu/download/hw/midge/free/eng/3_fw/midge2-mib.mib
+        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-SMI.mib
+        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-TC.mib
+        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-TM.mib
+        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-MIB.mib
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install coverage
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install coverage
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Run tests
-        run: |
-          coverage run -m unittest tests.test_parser
-          coverage run -m unittest tests.test_tree
+    - name: Run tests
+      run: |
+        coverage run -m unittest tests.test_parser
+        coverage run -m unittest tests.test_tree
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
