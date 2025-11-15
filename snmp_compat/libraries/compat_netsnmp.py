@@ -84,3 +84,9 @@ class NetSNMPResponse(SNMPResponse):
             raise snmp_exceptions.SNMPNoData(oid=self.oid)
         else:
             return self.value
+
+    def hex_string(self):
+        if self.snmp_type == 'Hex-STRING':
+            return self.typed_value()
+        else:
+            return super().hex_string()

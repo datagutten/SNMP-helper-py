@@ -14,6 +14,11 @@ class EasySNMPResponse(SNMPResponse):
 
     def typed_value(self):
         if self.snmp_type == 'OCTETSTR':
+            # Detect hex string, match C code in netsnmp-py3
+            # https://github.com/xstaticxgpx/netsnmp-py3/blob/a8c83851351f04a304ff81dbbd1d92433a43eac4/netsnmp/interface.c#L90
+            for char in self.value:
+                if not char.isprintable() and not char.isspace():
+                    return self.hex_string()
             return self.value
         elif self.snmp_type in ['INTEGER', 'COUNTER', 'COUNTER64', 'GAUGE']:
             return int(self.value)
