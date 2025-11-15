@@ -68,7 +68,7 @@ class SNMPTestCase(unittest.TestCase):
 
     def test_mac(self):
         session = SNMPSession(snmpsim_host, 'public')
-        response = session.get('.1.3.6.1.2.1.2.2.1.6.2').typed_value()
+        response = session.get('.1.3.6.1.2.1.2.2.1.6.2').hex_string()
         self.assertEqual('00127962f940', response)
 
     def test_get_next(self):

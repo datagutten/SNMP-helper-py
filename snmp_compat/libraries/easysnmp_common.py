@@ -14,9 +14,6 @@ class EasySNMPResponse(SNMPResponse):
 
     def typed_value(self):
         if self.snmp_type == 'OCTETSTR':
-            for char in self.value:
-                if not char.isprintable():
-                    return self.hex_string()
             return self.value
         elif self.snmp_type in ['INTEGER', 'COUNTER', 'COUNTER64', 'GAUGE']:
             return int(self.value)
