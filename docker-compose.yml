@@ -1,0 +1,29 @@
+services:
+  snmpsim:
+    build: snmpsim
+    ports:
+    - "161:161/udp"
+
+  tests_netsnmp:
+    build:
+      context: .
+      args:
+        SNMP_LIBRARY: "netsnmp"
+    depends_on:
+    - snmpsim
+
+  tests_ezsnmp:
+    build:
+      context: .
+      args:
+        SNMP_LIBRARY: "ezsnmp"
+    depends_on:
+    - snmpsim
+
+  tests_easysnmp:
+    build:
+      context: .
+      args:
+        SNMP_LIBRARY: "easysnmp"
+    depends_on:
+    - snmpsim

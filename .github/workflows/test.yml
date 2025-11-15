@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Start snmpsim
-      run: docker run -d -p 161:161/udp ghcr.io/lextudio/docker-snmpsim:master
+      run: docker compose up -d snmpsim
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
