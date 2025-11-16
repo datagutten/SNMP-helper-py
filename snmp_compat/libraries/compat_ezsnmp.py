@@ -48,3 +48,11 @@ class EZSNMPCompat(SNMPCompat):
             self._convert_exception(e, oid)
         except SystemError as e:
             raise snmp_exceptions.SNMPError(e, self, oid)
+
+    def bulkwalk(self, oid):
+        try:
+            return list(map(lambda var: convert_response(var), self.session.bulkwalk(oid)))
+        except ezsnmp.exceptions.EzSNMPError as e:
+            self._convert_exception(e, oid)
+        except SystemError as e:
+            raise snmp_exceptions.SNMPError(e, self, oid)

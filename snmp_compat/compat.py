@@ -26,6 +26,9 @@ class SNMPCompat(ABC):
     def walk(self, oid: str) -> List[SNMPResponse]:
         raise NotImplementedError
 
+    def bulkwalk(self, oid: str) -> List[SNMPResponse]:
+        return self.walk(oid)
+
 
 def select(library=None) -> Type[SNMPCompat]:
     if library is None:
