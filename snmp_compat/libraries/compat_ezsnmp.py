@@ -20,10 +20,10 @@ class EZSNMPCompat(SNMPCompat):
 
     def _convert_exception(self, e: ezsnmp.EzSNMPError, oid: str):
         oid = oid.replace('iso.', '.1.')
-        if type(e) is ezsnmp.EzSNMPTimeoutError:
+        if type(e) is ezsnmp.exceptions.EzSNMPTimeoutError:
             raise snmp_exceptions.SNMPTimeout(e, self, oid)
-        elif type(e) in [ezsnmp.EzSNMPNoSuchInstanceError, ezsnmp.EzSNMPNoSuchObjectError,
-                         ezsnmp.EzSNMPNoSuchNameError]:
+        elif type(e) in [ezsnmp.exceptions.EzSNMPNoSuchInstanceError, ezsnmp.exceptions.EzSNMPNoSuchObjectError,
+                         ezsnmp.exceptions.EzSNMPNoSuchNameError]:
             raise snmp_exceptions.SNMPNoData(e, self, oid)
         else:
             raise snmp_exceptions.SNMPError(e, self, oid)
