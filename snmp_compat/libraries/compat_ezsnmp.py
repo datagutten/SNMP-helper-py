@@ -22,7 +22,8 @@ class EZSNMPCompat(SNMPCompat):
         oid = oid.replace('iso.', '.1.')
         if type(e) is ezsnmp.EzSNMPTimeoutError:
             raise snmp_exceptions.SNMPTimeout(e, self, oid)
-        elif type(e) in [ezsnmp.EzSNMPNoSuchInstanceError, ezsnmp.EzSNMPNoSuchObjectError]:
+        elif type(e) in [ezsnmp.EzSNMPNoSuchInstanceError, ezsnmp.EzSNMPNoSuchObjectError,
+                         ezsnmp.EzSNMPNoSuchNameError]:
             raise snmp_exceptions.SNMPNoData(e, self, oid)
         else:
             raise snmp_exceptions.SNMPError(e, self, oid)
