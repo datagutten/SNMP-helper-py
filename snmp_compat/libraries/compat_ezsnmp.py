@@ -51,6 +51,9 @@ class EZSNMPCompat(SNMPCompat):
             raise snmp_exceptions.SNMPError(e, self, oid)
 
     def bulkwalk(self, oid):
+        if self.session.version < 2:
+            return self.walk(oid)
+
         try:
             return list(map(lambda var: convert_response(var), self.session.bulkwalk(oid)))
         except ezsnmp.exceptions.EzSNMPError as e:
