@@ -45,6 +45,9 @@ def select(library=None) -> Type[SNMPCompat]:
     elif library == 'ezsnmp':
         from .libraries.compat_ezsnmp import EZSNMPCompat
         return EZSNMPCompat
+    elif library == 'ezsnmp2':
+        from .libraries.compat_ezsnmp import EZSNMPCompat
+        return EZSNMPCompat
     elif library == 'pysnmp':
         from .libraries.compat_pysnmp import PySNMPCompat
         return PySNMPCompat

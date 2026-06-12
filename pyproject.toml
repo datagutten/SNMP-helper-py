@@ -12,7 +12,10 @@ python = ">=3.10,<3.15"
 [tool.poetry.group.easysnmp.dependencies]
 easysnmp = "^0.2.6"
 [tool.poetry.group.ezsnmp.dependencies]
-ezsnmp = "^2"
+ezsnmp = "^1"
+[tool.poetry.group.ezsnmp2.dependencies]
+#ezsnmp = "^2"
+ezsnmp = { git = "https://github.com/carlkidcrypto/ezsnmp.git", branch = "copilot/bugfix-ezsnmp-get-next" }
 [tool.poetry.group.netsnmp.dependencies]
 netsnmp-py = { git = "https://github.com/datagutten/netsnmp-py3.git", branch = "exception_fix" }
 [tool.poetry.group.pysnmp.dependencies]
