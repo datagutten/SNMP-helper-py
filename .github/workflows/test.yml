@@ -14,13 +14,13 @@ jobs:
         snmp-library: [ 'pysnmp', 'ezsnmp' ]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Start snmpsim
       run: docker compose up -d snmpsim
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -42,6 +42,6 @@ jobs:
         SNMP_LIBRARY: ${{ matrix.snmp-library }}
         SNMPSIM_HOST: 127.0.0.1
 
-    - uses: codecov/codecov-action@v5
+    - uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
