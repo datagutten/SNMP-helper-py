@@ -36,10 +36,10 @@ jobs:
         mkdir -p mibs
         cd mibs
         wget -nc --no-check-certificate -O MG-MIB.mib https://www.racom.eu/download/hw/midge/free/eng/3_fw/midge2-mib.mib
-        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-SMI.mib
-        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-TC.mib
-        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-TM.mib
-        wget -nc http://www.circitor.fr/Mibs/Mib/S/SNMPv2-MIB.mib
+        wget -nc https://circitor.fr/Mibs/Files/SNMPv2-SMI.mib
+        wget -nc https://circitor.fr/Mibs/Files/SNMPv2-TC.mib
+        wget -nc https://circitor.fr/Mibs/Files/SNMPv2-TM.mib
+        wget -nc https://circitor.fr/Mibs/Files/SNMPv2-MIB.mib
 
     - name: Install dependencies
       run: |
