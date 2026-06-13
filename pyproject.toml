@@ -15,7 +15,7 @@ easysnmp = "^0.2.6"
 ezsnmp = "^1|^2"
 [tool.poetry.group.ezsnmp2.dependencies]
 #ezsnmp = "^2"
-ezsnmp = { git = "https://github.com/carlkidcrypto/ezsnmp.git", branch = "copilot/bugfix-ezsnmp-get-next" }
+ezsnmp = { git = "https://github.com/carlkidcrypto/ezsnmp.git", branch = "copilot/bugfix-ezsnmp-get-next", rev = "cd179620f6ea8b7d33364ea9c95c6f323d547775" }
 [tool.poetry.group.netsnmp.dependencies]
 netsnmp-py = { git = "https://github.com/datagutten/netsnmp-py3.git", branch = "exception_fix" }
 [tool.poetry.group.pysnmp.dependencies]
