@@ -9,7 +9,7 @@ readme = "README.md"
 [dependency-groups]
 easysnmp = ["easysnmp>=0.2.6,<0.3"]
 ezsnmp = ["ezsnmp>=1,<3"]
-ezsnmp2 = [{ include = "ezsnmp" }]
+ezsnmp2 = [{ include-group = "ezsnmp" }]
 netsnmp = ["netsnmp-py"]
 pysnmp = ["pysnmp>=7,<8"]
 dev = ["coverage[toml]>=7.10.0,<8"]
