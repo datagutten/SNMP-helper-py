@@ -13,7 +13,7 @@ ENV SNMPSIM_HOST=snmpsim
 RUN apt-get update && apt-get install -y libsnmp-dev libzmq3-dev libczmq-dev
 
 
-RUN pip install --upgrade pip uv
+RUN pip install --upgrade pip uv[toml]
 
 COPY snmp_compat snmp_compat
 COPY mib_parser mib_parser
