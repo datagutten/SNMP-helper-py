@@ -22,7 +22,7 @@ class SNMPTestCase(unittest.TestCase):
                          str(context.exception))
 
     def test_connection_error(self):
-        if os.getenv('SNMP_LIBRARY') == 'ezsnmp':
+        if os.getenv('SNMP_LIBRARY') == 'ezsnmp2':
             self.skipTest('ezsnmp does not throw exception on connect')
         with self.assertRaises(snmp_exceptions.SNMPConnectionError) as context:
             SNMPSession('127.0.0.1.2', 'ciscobad')
