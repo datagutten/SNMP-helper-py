@@ -11,7 +11,7 @@ easysnmp = ["easysnmp>=0.2.6,<0.3"]
 ezsnmp = ["ezsnmp>=1.0.0,<2"]
 netsnmp = ["netsnmp-py"]
 pysnmp = ["pysnmp>=7,<8"]
-dev = ["coverage>=7.10.0,<8"]
+dev = ["coverage[toml]>=7.10.0,<8"]
 
 [tool.uv]
 default-groups = ["ezsnmp"]
