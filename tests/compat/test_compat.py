@@ -83,6 +83,15 @@ class SNMPTestCase(unittest.TestCase):
         self.assertEqual(len(response), 32)
         self.assertEqual(response[31].oid, '.1.3.6.1.2.1.1.9.1.4.8')
 
+    def test_multiline(self):
+        session = SNMPSession(snmpsim_host, 'cisco')
+        response = session.get('.1.3.6.1.2.1.1.1.0')
+        desc = (
+            "Cisco IOS Software, C2960S Software (C2960S-UNIVERSALK9-M), Version 15.0(2)SE11, RELEASE SOFTWARE (fc3)\r\n"
+            "Technical Support: http://www.cisco.com/techsupport\r\nCopyright (c) 1986-2017 by Cisco Systems, Inc.\r\n"
+            "Compiled Sat 19-Aug-17 08:57 by prod_rel_team")
+        self.assertEqual(response.typed_value(), desc)
+
 
 if __name__ == '__main__':
     unittest.main()
