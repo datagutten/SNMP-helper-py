@@ -3,7 +3,7 @@ name = "SNMP-helper"
 version = "0.1.0"
 description = "SNMP library compatibility module"
 authors = [{ name = "Anders Birkenes", email = "datagutten@datagutten.net" }]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 readme = "README.md"
 
 [dependency-groups]
