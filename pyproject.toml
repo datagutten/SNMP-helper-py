@@ -1,29 +1,34 @@
-[tool.poetry]
+[project]
 name = "SNMP-helper"
 version = "0.1.0"
 description = "SNMP library compatibility module"
-authors = ["Anders Birkenes <datagutten@datagutten.net>"]
+authors = [{ name = "Anders Birkenes", email = "datagutten@datagutten.net" }]
+requires-python = ">=3.9"
 readme = "README.md"
-packages = [{ include = "snmp_compat" }, { include = "mib_parser" }]
 
-[tool.poetry.dependencies]
-python = ">=3.9"
+[dependency-groups]
+easysnmp = ["easysnmp>=0.2.6,<0.3"]
+ezsnmp = ["ezsnmp>=1.0.0,<2"]
+netsnmp = ["netsnmp-py"]
+pysnmp = ["pysnmp>=7,<8"]
+dev = ["coverage>=7.10.0,<8"]
 
-[tool.poetry.group.easysnmp.dependencies]
-easysnmp = "^0.2.6"
-[tool.poetry.group.ezsnmp.dependencies]
-ezsnmp = "^1.0.0"
-[tool.poetry.group.netsnmp.dependencies]
+[tool.uv]
+default-groups = ["ezsnmp"]
+
+[tool.uv.sources]
 netsnmp-py = { git = "https://github.com/datagutten/netsnmp-py3.git", branch = "exception_fix" }
-[tool.poetry.group.pysnmp.dependencies]
-pysnmp = "^7"
 
-[tool.poetry.group.dev.dependencies]
-coverage = "^7.10.0"
+[tool.uv.build-backend]
+module-name = [
+    "snmp_compat",
+    "mib_parser",
+]
+module-root = ""
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.11.21,<0.12.0"]
+build-backend = "uv_build"
 
 [tool.coverage.run]
 branch = true

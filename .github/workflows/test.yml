@@ -28,16 +28,14 @@ jobs:
       if: ${{matrix.snmp-library == 'netsnmp'}}
       run: |
         sudo apt-get update && apt-get -y install libsnmp-dev libczmq-dev
-        python -m pip install pyzmq netsnmp-py 
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip poetry poetry-plugin-export
-        poetry export -f requirements.txt --without-hashes --with ${{ matrix.snmp-library }} --with dev -o requirements.txt
-        pip install -r requirements.txt
+        python -m pip install --upgrade pip uv
+        uv sync --no-default-groups --group dev --group ${{ matrix.snmp-library }}
 
     - name: Run tests with unittest
-      run: coverage run -m unittest tests.compat.test_compat
+      run: uv run coverage run -m unittest tests.compat.test_compat
       env:
         SNMP_LIBRARY: ${{ matrix.snmp-library }}
         SNMPSIM_HOST: 127.0.0.1
