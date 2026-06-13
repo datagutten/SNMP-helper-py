@@ -13,13 +13,14 @@ ENV SNMPSIM_HOST=snmpsim
 RUN apt-get update && apt-get install -y libsnmp-dev libzmq3-dev libczmq-dev
 
 
-RUN pip install --upgrade pip poetry poetry-plugin-export
+RUN pip install --upgrade pip uv
 
 COPY snmp_compat snmp_compat
+COPY mib_parser mib_parser
 COPY tests tests
 COPY pyproject.toml pyproject.toml
+COPY README.md .
 
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --with ${SNMP_LIBRARY}
-RUN pip install -r requirements.txt
+RUN uv sync --no-default-groups --group dev --group ${SNMP_LIBRARY}
 
-# ENTRYPOINT ["python3", "-m", "unittest"]
+CMD uv run coverage run -m unittest tests.compat.test_compat
