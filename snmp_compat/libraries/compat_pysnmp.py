@@ -40,7 +40,7 @@ class PYSNMPResponse(SNMPResponse):
             if self.value == b'':
                 return ''
             for char in string_value:
-                if not char.isprintable():
+                if not char.isprintable() and not char.isspace():
                     return self.hex_string()
             return string_value
         elif self.snmp_type.typeId == 4:
