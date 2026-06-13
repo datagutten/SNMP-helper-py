@@ -24,10 +24,13 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install netsnmp-py
+    - name: Install libsnmp-dev
+      if: ${{matrix.snmp-library != 'pysnmp'}}
+      run: sudo apt-get update && apt-get -y install libsnmp-dev
+
+    - name: Install libczmq-dev
       if: ${{matrix.snmp-library == 'netsnmp'}}
-      run: |
-        sudo apt-get update && apt-get -y install libsnmp-dev libczmq-dev
+      run: sudo apt-get update && apt-get -y install libczmq-dev
 
     - name: Install dependencies
       run: |
