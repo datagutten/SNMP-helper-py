@@ -38,6 +38,10 @@ jobs:
       if: ${{matrix.snmp-library == 'ezsnmp'}}
       run: uv add "ezsnmp<2"
 
+    - name: Install ezsnmp v2 bugfix
+      if: ${{matrix.snmp-library == 'ezsnmp2'}}
+      run: uv add git+https://github.com/carlkidcrypto/ezsnmp.git --rev cd179620f6ea8b7d33364ea9c95c6f323d547775
+
     - name: Run tests with unittest
       run: uv run coverage run -m unittest tests.compat.test_compat
       env:
