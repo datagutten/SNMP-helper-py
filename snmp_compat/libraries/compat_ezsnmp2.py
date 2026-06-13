@@ -26,7 +26,7 @@ class EzSNMPResponse(SNMPResponse):
             return self.value
 
 
-class EZSNMPCompat(SNMPCompat):
+class EZSNMP2Compat(SNMPCompat):
     def __init__(self, hostname, community, version: Literal[1, 2, 3] = 2, timeout=1, retries=1):
         super().__init__(hostname, community)
         try:
