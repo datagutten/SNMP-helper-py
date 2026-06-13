@@ -4,6 +4,7 @@ from typing import List
 
 from pysnmp.error import PySnmpError
 from pysnmp.hlapi.v3arch.asyncio import *
+from pysnmp.proto import rfc1902
 
 from snmp_compat import SNMPCompat, SNMPResponse, snmp_exceptions
 
@@ -13,8 +14,12 @@ class PYSNMPResponse(SNMPResponse):
     _response = None
 
     def __init__(self, oid=None, oid_index=None, response=None, snmp_type=None):
-        # noinspection PyProtectedMember
-        value = response._value
+        if not hasattr(response, '_value'):
+            value = None
+        else:
+            # noinspection PyProtectedMember
+            value = response._value
+
         self._response = response
         super().__init__(oid, oid_index, value, snmp_type)
 
@@ -28,11 +33,9 @@ class PYSNMPResponse(SNMPResponse):
         return string
 
     def typed_value(self):
-        if type(self._response) in [Integer32, Counter32, Counter64, Gauge32]:
-            return self.value
-        elif self.snmp_type == TimeTicks:
+        if self.snmp_type == rfc1902.TimeTicks:
             return datetime.timedelta(seconds=int(self._response) / 100)
-        elif self.snmp_type == OctetString:
+        elif self.snmp_type == rfc1902.OctetString:  # OctetString:
             string_value = str(self._response)
             if self.value == b'':
                 return ''
@@ -40,8 +43,10 @@ class PYSNMPResponse(SNMPResponse):
                 if not char.isprintable():
                     return self.hex_string()
             return string_value
+        elif self.snmp_type.typeId == 4:
+            return self.value.decode(self.snmp_type.encoding)
         else:
-            return str(self._response)
+            return self.value
 
 
 class PySNMPCompat(SNMPCompat):
