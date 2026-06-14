@@ -58,7 +58,8 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.snmp-library }}-${{ matrix.python-version }}
-        path: ./coverage.xml
+        path: .coverage
+        include-hidden-files: true
 
   upload-to-codecov:
     runs-on: ubuntu-latest
@@ -66,8 +67,19 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v6
+      with:
+        python-version: 3.14
+
+    - name: Install coverage
+      run: python -m pip install coverage
+
     - name: Download artifacts
       uses: actions/download-artifact@v8
+
+    - name: Combine coverage
+      run: coverage combine
 
     - uses: codecov/codecov-action@v7
       with:
