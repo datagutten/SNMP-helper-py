@@ -97,7 +97,7 @@ class SNMPResponse(object):
             string += format(octet, 'x')
         return string
 
-    def ip_address_bytes(self):
+    def ip_address_bytes(self) -> str:
         string = ''
         for octet in self.value:
             if type(octet) is not int:
@@ -107,11 +107,13 @@ class SNMPResponse(object):
             string += '%d.' % octet
         return string[:-1]
 
-    def ip_address(self):
+    def ip_address(self) -> str:
         """
         Get value and format as IP-address if needed
-        :return: 
+        :return:
         """
+        if type(self.value) is bytes:
+            return self.ip_address_bytes()
         for char in self.value:
             if not char.isprintable() and not char.isspace():
                 return self.ip_address_bytes()
