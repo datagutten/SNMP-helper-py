@@ -22,5 +22,9 @@ COPY pyproject.toml pyproject.toml
 COPY README.md .
 
 RUN uv sync --no-default-groups --group dev --group ${SNMP_LIBRARY}
+RUN if [ "${SNMP_LIBRARY}" = "ezsnmp" ]; then \
+      uv add "ezsnmp<2"; \
+    fi
+
 
 CMD uv run coverage run -m unittest tests.compat.test_compat

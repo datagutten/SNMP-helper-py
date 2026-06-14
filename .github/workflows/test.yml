@@ -10,8 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ '3.9', '3.10','3.12' ]
-        snmp-library: [ 'pysnmp', 'ezsnmp' ]
+        python-version: [ '3.10','3.12', '3.14' ]
+        snmp-library: [ 'pysnmp', 'ezsnmp', 'ezsnmp2' ]
 
     steps:
     - uses: actions/checkout@v6
@@ -24,15 +24,26 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install netsnmp-py
+    - name: Install libsnmp-dev
+      if: ${{matrix.snmp-library != 'pysnmp'}}
+      run: sudo apt-get update && sudo apt-get -y install libsnmp-dev
+
+    - name: Install libczmq-dev
       if: ${{matrix.snmp-library == 'netsnmp'}}
-      run: |
-        sudo apt-get update && apt-get -y install libsnmp-dev libczmq-dev
+      run: sudo apt-get update && sudo apt-get -y install libczmq-dev
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip uv
+        python -m pip install --upgrade pip uv coverage
         uv sync --no-default-groups --group dev --group ${{ matrix.snmp-library }}
+
+    - name: Install ezsnmp v1
+      if: ${{matrix.snmp-library == 'ezsnmp'}}
+      run: uv add "ezsnmp<2"
+
+    - name: Install ezsnmp v2 bugfix
+      if: ${{matrix.snmp-library == 'ezsnmp2'}}
+      run: uv add git+https://github.com/carlkidcrypto/ezsnmp.git --rev cd179620f6ea8b7d33364ea9c95c6f323d547775
 
     - name: Run tests with unittest
       run: uv run coverage run -m unittest tests.compat.test_compat

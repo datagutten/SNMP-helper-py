@@ -20,10 +20,26 @@ services:
     depends_on:
     - snmpsim
 
+  tests_ezsnmp2:
+    build:
+      context: .
+      args:
+        SNMP_LIBRARY: "ezsnmp2"
+    depends_on:
+    - snmpsim
+
   tests_easysnmp:
     build:
       context: .
       args:
         SNMP_LIBRARY: "easysnmp"
+    depends_on:
+    - snmpsim
+
+  tests_pysnmp:
+    build:
+      context: .
+      args:
+        SNMP_LIBRARY: "pysnmp"
     depends_on:
     - snmpsim
