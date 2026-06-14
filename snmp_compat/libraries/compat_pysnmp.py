@@ -32,6 +32,16 @@ class PYSNMPResponse(SNMPResponse):
             string += format(octet, 'x')
         return string
 
+    def ip_address(self):
+        string = ''
+        for octet in self.value:
+            if type(octet) is not int:
+                octet = ord(octet)
+            if octet > 255:
+                raise ValueError("Invalid IP address")
+            string += '%d.' % octet
+        return string[:-1]
+
     def typed_value(self):
         if self.snmp_type == rfc1902.TimeTicks:
             return datetime.timedelta(seconds=int(self._response) / 100)
@@ -43,6 +53,8 @@ class PYSNMPResponse(SNMPResponse):
                 if not char.isprintable() and not char.isspace():
                     return self.hex_string()
             return string_value
+        elif self.snmp_type == rfc1902.IpAddress:
+            return self.ip_address()
         elif self.snmp_type.typeId == 4:
             return self.value.decode(self.snmp_type.encoding)
         else:

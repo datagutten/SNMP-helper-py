@@ -95,5 +95,8 @@ class SNMPResponse(object):
             string += format(octet, 'x')
         return string
 
+    def ip_address(self):
+        return self.value
+
     def typed_value(self):
         raise NotImplementedError
