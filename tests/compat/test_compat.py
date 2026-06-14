@@ -73,6 +73,17 @@ class SNMPTestCase(unittest.TestCase):
         self.assertEqual('00127962f940', response.hex_string())
         self.assertEqual('00127962f940', response.typed_value())
 
+    def test_ip(self):
+        session = SNMPSession(snmpsim_host, 'public')
+        response = session.get_next('.1.3.6.1.2.1.4.20.1.1')
+        self.assertEqual('127.0.0.1', response.ip_address())
+        self.assertEqual('127.0.0.1', response.typed_value())
+
+    def test_cdp_ip(self):
+        session = SNMPSession(snmpsim_host, 'cisco')
+        response = session.get('.1.3.6.1.4.1.9.9.23.1.2.1.1.4.10122.4')
+        self.assertEqual('10.0.2.242', response.ip_address())
+
     def test_get_next(self):
         session = SNMPSession(snmpsim_host, 'public')
         response = session.get_next('.1.3.6.1.2.1.1.4.0')

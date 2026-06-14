@@ -34,9 +34,7 @@ class PYSNMPResponse(SNMPResponse):
 
     def ip_address(self):
         string = ''
-        for octet in self.value:
-            if type(octet) is not int:
-                octet = ord(octet)
+        for octet in self._response.asOctets():
             if octet > 255:
                 raise ValueError("Invalid IP address")
             string += '%d.' % octet

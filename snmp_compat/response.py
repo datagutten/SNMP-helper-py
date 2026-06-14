@@ -15,6 +15,8 @@ OID_INDEX_RE = re.compile(
     re.VERBOSE
 )
 
+ip_re = re.compile(r'^(?:\b\.?(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){4}$')
+
 
 def mac_string(mac_address):
     string = ''
@@ -95,7 +97,24 @@ class SNMPResponse(object):
             string += format(octet, 'x')
         return string
 
+    def ip_address_bytes(self):
+        string = ''
+        for octet in self.value:
+            if type(octet) is not int:
+                octet = ord(octet)
+            if octet > 255:
+                raise ValueError("Invalid IP address")
+            string += '%d.' % octet
+        return string[:-1]
+
     def ip_address(self):
+        """
+        Get value and format as IP-address if needed
+        :return: 
+        """
+        for char in self.value:
+            if not char.isprintable() and not char.isspace():
+                return self.ip_address_bytes()
         return self.value
 
     def typed_value(self):
