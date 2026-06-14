@@ -51,6 +51,8 @@ jobs:
         SNMP_LIBRARY: ${{ matrix.snmp-library }}
         SNMPSIM_HOST: 127.0.0.1
 
+    - run: ls -la
+
     - name: Save coverage
       uses: actions/upload-artifact@v7
       with:
@@ -76,6 +78,8 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         merge-multiple: true
+
+    - run: ls -la
 
     - name: Combine coverage
       run: coverage combine
