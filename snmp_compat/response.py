@@ -87,7 +87,8 @@ class SNMPResponse(object):
     def hex_string(self):
         string = ''
         for octet in self.value:
-            octet = ord(octet)
+            if type(octet) is not int:
+                octet = ord(octet)
             if octet <= 0x0f:
                 string += '0'
             # Format as lower case hex digit without prefix
