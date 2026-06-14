@@ -36,6 +36,17 @@ class SNMPTestCase(unittest.TestCase):
             'Timeout for oid .1.3.6.1.2.1.1.6',
             str(context.exception))
 
+    def test_timeout_3sec(self):
+        start = datetime.datetime.now()
+        with self.assertRaises(snmp_exceptions.SNMPTimeout) as context:
+            session = SNMPSession(snmpsim_host, 'ciscobad', timeout=3)
+            session.get('.1.3.6.1.2.1.1.6')
+        self.assertIn(
+            'Timeout for oid .1.3.6.1.2.1.1.6',
+            str(context.exception))
+        diff = datetime.datetime.now() - start
+        self.assertGreaterEqual(diff.seconds, 3)
+
     def test_empty_string(self):
         session = SNMPSession(snmpsim_host, 'public')
         response = session.get('.1.3.6.1.2.1.31.1.1.1.18.1')
