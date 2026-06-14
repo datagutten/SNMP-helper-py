@@ -55,7 +55,7 @@ jobs:
       run: uv run coverage xml
 
     - name: Save coverage
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v8
       with:
         name: ${{ matrix.snmp-library }}-${{ matrix.python-version }}
         path: ./coverage.xml
@@ -65,7 +65,7 @@ jobs:
     needs: test
     steps:
     - name: Download artifacts
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v8
 
     - uses: codecov/codecov-action@v7
       with:
