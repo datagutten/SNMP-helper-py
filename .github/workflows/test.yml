@@ -55,7 +55,7 @@ jobs:
       run: uv run coverage xml
 
     - name: Save coverage
-      uses: actions/upload-artifact@v8
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.snmp-library }}-${{ matrix.python-version }}
         path: ./coverage.xml
