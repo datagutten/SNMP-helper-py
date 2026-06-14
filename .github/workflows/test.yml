@@ -46,7 +46,7 @@ jobs:
       run: uv add git+https://github.com/carlkidcrypto/ezsnmp.git --rev cd179620f6ea8b7d33364ea9c95c6f323d547775
 
     - name: Run tests with unittest
-      run: uv run coverage run -m unittest tests.compat.test_compat
+      run: uv run coverage run --parallel-mode -m unittest tests.compat.test_compat
       env:
         SNMP_LIBRARY: ${{ matrix.snmp-library }}
         SNMPSIM_HOST: 127.0.0.1
@@ -58,7 +58,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.snmp-library }}-${{ matrix.python-version }}
-        path: .coverage
+        path: .coverage*
         include-hidden-files: true
 
   upload-to-codecov:
