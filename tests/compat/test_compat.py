@@ -2,10 +2,9 @@ import datetime
 import os
 import unittest
 
-from snmp_compat import snmp_exceptions
-from snmp_compat.compat import select
+from snmp_compat import snmp_exceptions, compat
 
-SNMPSession = select(os.getenv('SNMP_LIBRARY'))
+SNMPSession = compat.select(os.getenv('SNMP_LIBRARY'))
 
 print('Running tests with SNMP library %s' % os.getenv('SNMP_LIBRARY'))
 
@@ -94,6 +93,22 @@ class SNMPTestCase(unittest.TestCase):
             "Technical Support: http://www.cisco.com/techsupport\r\nCopyright (c) 1986-2017 by Cisco Systems, Inc.\r\n"
             "Compiled Sat 19-Aug-17 08:57 by prod_rel_team")
         self.assertEqual(response.typed_value(), desc)
+
+    def test_select(self):
+        lib = compat.select()
+        self.assertIsInstance(lib, type(compat.SNMPCompat))
+
+    def test_select_invalid(self):
+        with self.assertRaises(AttributeError) as context:
+            compat.select('bad')
+        self.assertEqual('Invalid library bad', str(context.exception))
+
+    def test_select_none(self):
+        with self.assertRaises(AttributeError) as context:
+            del os.environ['SNMP_LIBRARY']
+            compat.select(None)
+        self.assertEqual('library argument not set and SNMP_LIBRARY environment variable not set',
+                         str(context.exception))
 
 
 if __name__ == '__main__':
