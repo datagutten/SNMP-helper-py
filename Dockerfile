@@ -24,6 +24,8 @@ COPY README.md .
 RUN uv sync --no-default-groups --group dev --group ${SNMP_LIBRARY}
 RUN if [ "${SNMP_LIBRARY}" = "ezsnmp" ]; then \
       uv add "ezsnmp<2"; \
+    elif [ "${SNMP_LIBRARY}" = "ezsnmp2" ]; then \
+      uv add git+https://github.com/carlkidcrypto/ezsnmp.git --rev cd179620f6ea8b7d33364ea9c95c6f323d547775; \
     fi
 
 
