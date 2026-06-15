@@ -86,6 +86,12 @@ class SNMPResponse(object):
             )
         )
 
+    def __int__(self):
+        return int(self.typed_value())
+
+    def __str__(self):
+        return str(self.typed_value())
+
     def hex_string(self):
         string = ''
         for octet in self.value:
