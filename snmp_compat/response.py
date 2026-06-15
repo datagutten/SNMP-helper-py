@@ -92,6 +92,14 @@ class SNMPResponse(object):
     def __str__(self):
         return str(self.typed_value())
 
+    def __bytes__(self):
+        if type(self.value) is bytes:
+            return self.value
+        elif type(self.value) is str:
+            return self.value.encode()
+        else:
+            raise ValueError('Unable to convert value of type %s to bytes' % type(self.value))
+
     def hex_string(self):
         string = ''
         for octet in self.value:
