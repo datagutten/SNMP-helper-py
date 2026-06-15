@@ -96,7 +96,7 @@ class SNMPResponse(object):
         if type(self.value) is bytes:
             return self.value
         elif type(self.value) is str:
-            return self.value.encode()
+            return bytes([ord(byte) for byte in self.value])
         else:
             raise ValueError('Unable to convert value of type %s to bytes' % type(self.value))
 

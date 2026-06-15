@@ -146,6 +146,7 @@ class SNMPTestCase(unittest.TestCase):
         session = SNMPSession(snmpsim_host, 'cisco', **args)
         response = session.get_next('.1.3.6.1.4.1.9.9.46.1.6.1.1.4')
         self.assertEqual(bytes(response)[0], 0x7f)
+        self.assertEqual(bytes(response)[1], 0xff)
 
 
 if __name__ == '__main__':
