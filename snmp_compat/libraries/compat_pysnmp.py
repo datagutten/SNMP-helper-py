@@ -53,7 +53,7 @@ class PYSNMPResponse(SNMPResponse):
             return string_value
         elif self.snmp_type == rfc1902.IpAddress:
             return self.ip_address()
-        elif self.snmp_type.typeId == 4:
+        elif hasattr(self.snmp_type, 'typeId') and self.snmp_type.typeId == 4:
             return self.value.decode(self.snmp_type.encoding)
         else:
             return self.value
