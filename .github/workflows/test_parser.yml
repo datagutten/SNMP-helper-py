@@ -24,7 +24,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Cache MIBs
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: tests/mibs
         key: mibs-${{ hashFiles('tests/mibs/*.mib') }}
