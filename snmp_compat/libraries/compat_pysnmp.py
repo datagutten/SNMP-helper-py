@@ -75,7 +75,9 @@ class PySNMPCompat(SNMPCompat):
 
     @classmethod
     def connect_v1(cls, hostname: str, community: str, version=1, timeout=0.5, retries=1):
-        auth_data = CommunityData(community, mpModel=version)  # 1= SNMPv2c
+        assert version <= 2
+        version = version - 1  # 0 = SNMPv1, 1= SNMPv2c
+        auth_data = CommunityData(community, mpModel=version)
         return cls(hostname, auth_data, ContextData())
 
     @classmethod
