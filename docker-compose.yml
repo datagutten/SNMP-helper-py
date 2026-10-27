@@ -3,6 +3,8 @@ services:
     build: snmpsim
     ports:
     - "161:161/udp"
+    environment:
+      EXTRA_FLAGS: "--v3-user=testing --v3-auth-key=testing123"
 
   tests_netsnmp:
     build:

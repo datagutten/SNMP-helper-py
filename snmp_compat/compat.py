@@ -4,15 +4,11 @@ from typing import Type, List
 
 from .response import SNMPResponse
 
+auth_levels = ['noAuthNoPriv', 'authNoPriv', 'authPriv']
 
-class SNMPCompat(ABC):
+
+class SNMPBase(ABC):
     session = None
-    hostname: str = None
-    community: str = None
-
-    def __init__(self, hostname, community, version=0, timeout=0.5, retries=1):
-        self.hostname = hostname
-        self.community = community
 
     def close(self):
         pass
@@ -28,6 +24,21 @@ class SNMPCompat(ABC):
 
     def bulkwalk(self, oid: str) -> List[SNMPResponse]:
         return self.walk(oid)
+
+
+class SNMPCompat(SNMPBase):
+    hostname: str = None
+    community: str = None
+
+    @classmethod
+    def connect_v1(cls, hostname: str, community: str, timeout=0.5, retries=1):
+        raise NotImplementedError
+
+    @classmethod
+    def connect_v3(cls, hostname: str, auth_username: str, auth_passphrase: str,
+                   auth_protocol: str = 'MD5', context: str = None,
+                   timeout: float = 0.5, retries: int = 1):
+        raise NotImplementedError
 
 
 def select(library=None) -> Type[SNMPCompat]:

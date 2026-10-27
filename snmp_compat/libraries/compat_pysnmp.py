@@ -1,16 +1,19 @@
 import asyncio
 import datetime
-from typing import List
+from typing import List, Any
 
+import pysnmp.hlapi.v3arch.asyncio as v3arch
+from pysnmp.entity.engine import SnmpEngine
 from pysnmp.error import PySnmpError
-from pysnmp.hlapi.v3arch.asyncio import *
+from pysnmp.hlapi.v3arch.asyncio import UsmUserData, ContextData, CommunityData
 from pysnmp.proto import rfc1902
+from pysnmp.smi.rfc1902 import ObjectType, ObjectIdentity
 
 from snmp_compat import SNMPCompat, SNMPResponse, snmp_exceptions
 
 
 class PYSNMPResponse(SNMPResponse):
-    value: any
+    value: Any
     _response = None
 
     def __init__(self, oid=None, oid_index=None, response=None, snmp_type=None):
@@ -60,13 +63,35 @@ class PYSNMPResponse(SNMPResponse):
 
 
 class PySNMPCompat(SNMPCompat):
-    _transport: UdpTransportTarget = None
+    _transport: v3arch.UdpTransportTarget = None
+    _auth_data: CommunityData | UsmUserData
+    _context_data: ContextData
 
-    def __init__(self, hostname, community, version=0, timeout=0.5, retries=1):
-        super().__init__(hostname, community)
-
-        self.community_data = CommunityData(community, mpModel=version)  # 1= SNMPv2c
+    def __init__(self, hostname: str, auth_data: CommunityData | UsmUserData, context_data: ContextData):
+        self.hostname = hostname
+        self._auth_data = auth_data
+        self._context_data = context_data
         asyncio.run(self._async_connect())
+
+    @classmethod
+    def connect_v1(cls, hostname: str, community: str, version=1, timeout=0.5, retries=1):
+        auth_data = CommunityData(community, mpModel=version)  # 1= SNMPv2c
+        return cls(hostname, auth_data, ContextData())
+
+    @classmethod
+    def connect_v3(cls, hostname: str, auth_username: str, auth_passphrase: str,
+                   auth_protocol: str = None, context: str = None,
+                   timeout: float = 0.5, retries: int = 1):
+        auth_data = UsmUserData(auth_username, auth_passphrase, authProtocol=auth_protocol)
+        context_data = ContextData(contextName=context)
+        return cls(hostname, auth_data, context_data)
+
+    @property
+    def community(self):
+        if type(self._auth_data) is CommunityData:
+            return self._auth_data.communityName
+        else:
+            return self._auth_data.userName
 
     def _convert_response(self, response, oid: str = None):
         error_indication, error_status, error_index, var_binds = response
@@ -75,34 +100,37 @@ class PySNMPCompat(SNMPCompat):
 
         if error_status and str(error_status) == 'noSuchName':
             raise snmp_exceptions.SNMPNoData(oid=oid, session=self)
-        if error_indication and str(error_indication) == 'No SNMP response received before timeout':
-            raise snmp_exceptions.SNMPTimeout(oid=oid, session=self)
+        if error_indication is not None:
+            if str(error_indication) == 'No SNMP response received before timeout':
+                raise snmp_exceptions.SNMPTimeout(oid=oid, session=self)
+            else:
+                raise snmp_exceptions.SNMPError(str(error_indication))
 
         identity, response = var_binds[0]
         return PYSNMPResponse(oid=oid, response=response, snmp_type=type(response))
 
     async def _async_connect(self):
         try:
-            self._transport = await UdpTransportTarget.create((self.hostname, 161))
+            self._transport = await v3arch.UdpTransportTarget.create((self.hostname, 161))
         except PySnmpError as e:
             raise snmp_exceptions.SNMPConnectionError(e, self)
 
     async def get_async(self, oid: str):
         obj = ObjectType(ObjectIdentity(oid))
-        response = await get_cmd(SnmpEngine(),
-                                 self.community_data, self._transport, ContextData(), obj)
+        response = await v3arch.get_cmd(SnmpEngine(),
+                                        self._auth_data, self._transport, self._context_data, obj)
         return self._convert_response(response, oid)
 
     async def get_next_async(self, oid: str):
         obj = ObjectType(ObjectIdentity(oid))
-        response = await next_cmd(SnmpEngine(),
-                                  self.community_data, self._transport, ContextData(), obj)
+        response = await v3arch.next_cmd(SnmpEngine(),
+                                         self._auth_data, self._transport, self._context_data, obj)
         return self._convert_response(response, oid)
 
     async def walk_async(self, oid: str) -> List[SNMPResponse]:
         obj = ObjectType(ObjectIdentity(oid))
-        response = walk_cmd(SnmpEngine(),
-                            self.community_data, self._transport, ContextData(), obj)
+        response = v3arch.walk_cmd(SnmpEngine(),
+                                   self._auth_data, self._transport, self._context_data, obj)
         entries = []
         async for entry in response:
             entry = self._convert_response(entry)
