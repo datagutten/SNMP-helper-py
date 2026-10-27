@@ -23,11 +23,16 @@ def convert_response(data: tuple):
 
 class NetSNMPCompat(SNMPCompat):
 
-    def __init__(self, hostname, community, version=0, timeout=0.5, retries=1):
-        super().__init__(hostname, community)
+    @classmethod
+    def connect_v1(cls, hostname, community, version=0, timeout=0.5, retries=1):
+        self = cls()
+        self.hostname = hostname
+        self.community = community
+
         try:
             self.session = netsnmp.SNMPSession(peername=hostname, community=community, version=version, timeout=timeout,
                                                retries=retries)
+            return self
         except (SNMPError, SystemError, RuntimeError) as e:
             # raise get_exception(str(e))(e)
             raise snmp_exceptions.SNMPConnectionError(e, self)

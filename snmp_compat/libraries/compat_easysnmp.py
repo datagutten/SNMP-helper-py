@@ -10,10 +10,14 @@ def convert_variable(var: EasySNMPVariable):
 
 
 class EasySNMPCompat(SNMPCompat):
-    def __init__(self, hostname: str, community: str, version=2, timeout=0.5, retries=1):
-        super().__init__(hostname, community)
+    @classmethod
+    def connect_v1(cls, hostname: str, community: str, version=2, timeout=0.5, retries=1):
+        self = cls()
+        self.hostname = hostname
+        self.community = community
         try:
             self.session = easysnmp.Session(hostname, version, community, timeout, retries, abort_on_nonexistent=True)
+            return self
         except easysnmp.EasySNMPConnectionError as e:
             raise snmp_exceptions.SNMPConnectionError(e, self)
         except SystemError as e:
