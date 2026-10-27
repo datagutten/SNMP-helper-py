@@ -27,13 +27,32 @@ class EzSNMPResponse(SNMPResponse):
 
 
 class EZSNMP2Compat(SNMPCompat):
-    def __init__(self, hostname, community, version: Literal[1, 2, 3] = 2, timeout=1, retries=1):
-        super().__init__(hostname, community)
-        try:
-            self.session = ezsnmp.Session(hostname=hostname, version=version, community=community, timeout=timeout,
-                                          retries=retries)
-        except ezsnmp.exceptions.GenericError as e:
-            raise snmp_exceptions.SNMPConnectionError(e, self)
+    def __init__(self, session):
+        self.session = session
+        #
+        # except ezsnmp.exceptions.GenericError as e:
+        #     raise snmp_exceptions.SNMPConnectionError(e, self)
+
+    @classmethod
+    def connect_v1(cls, hostname: str, community: str, timeout=0.5, retries=1, version: Literal[1, 2] = 2):
+        session = ezsnmp.Session(hostname=hostname, version=version, community=community,
+                                 timeout=timeout,
+                                 retries=retries)
+        return cls(session)
+
+    @classmethod
+    def connect_v3(cls, hostname: str, auth_username: str, auth_passphrase: str,
+                   auth_protocol: str = 'MD5', context: str = None,
+                   timeout: float = 0.5, retries: int = 1):
+
+        security_level = 'authNoPriv'
+
+        session = ezsnmp.Session(hostname=hostname, context=context, version=3,
+                                 auth_protocol=auth_protocol,
+                                 security_username=auth_username,
+                                 auth_passphrase=auth_passphrase, timeout=timeout,
+                                 retries=retries, security_level=security_level)
+        return cls(session)
 
     def _convert_exception(self, e: ezsnmp.exceptions.GenericError, oid: str):
         oid = oid.replace('iso.', '.1.')
