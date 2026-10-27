@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.14
 
 # set work directory
 WORKDIR /usr/src/app
@@ -29,4 +29,5 @@ RUN if [ "${SNMP_LIBRARY}" = "ezsnmp" ]; then \
     fi
 
 
-CMD uv run coverage run -m unittest tests.compat.test_compat
+ENTRYPOINT ["uv",  "run"]
+CMD coverage run -m unittest tests.compat.test_compat
