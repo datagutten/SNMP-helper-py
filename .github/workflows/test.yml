@@ -12,6 +12,7 @@ jobs:
       matrix:
         python-version: [ '3.10','3.12', '3.14' ]
         snmp-library: [ 'pysnmp', 'ezsnmp2' ]
+        snmp-version: [ 1, 3 ]
 
     steps:
     - uses: actions/checkout@v6
@@ -42,6 +43,7 @@ jobs:
       env:
         SNMP_LIBRARY: ${{ matrix.snmp-library }}
         SNMPSIM_HOST: 127.0.0.1
+        SNMP_VERSION: ${{ matrix.snmp-version }}
 
     - uses: codecov/codecov-action@v7
       with:
