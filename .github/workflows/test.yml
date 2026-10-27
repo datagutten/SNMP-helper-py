@@ -14,7 +14,7 @@ jobs:
         snmp-library: [ 'pysnmp', 'ezsnmp', 'ezsnmp2' ]
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Start snmpsim
       run: docker compose up -d snmpsim
